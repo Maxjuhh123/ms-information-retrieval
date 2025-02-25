@@ -3,6 +3,8 @@ from typing import Callable, Optional
 
 import pandas as pd
 import pyterrier as pt
+from sklearn.feature_extraction.text import TfidfVectorizer
+import numpy as np
 
 
 DATASET = pt.datasets.get_dataset("irds:antique/test/non-offensive")
@@ -21,10 +23,21 @@ BM25 = pt.BatchRetrieve(
     properties={"termpipelines": ""},
     controls={"qe": "off"},
 )
-
+DOCS = [doc["text"] for doc in DATASET.get_corpus_iter()]
+VECTORIZER = TfidfVectorizer()
+TFIDF_MATRIX = VECTORIZER.fit_transform(DOCS)
 
 def search(query: str) -> pd.DataFrame:
     return (BM25 % 10).search(query)
+
+
+def get_tf_idf(word: str) -> float:
+    word_index = VECTORIZER.vocabulary_.get(word)
+
+    if word_index is not None:
+        return np.mean(TFIDF_MATRIX[:, word_index].toarray())
+    else:
+        return 0.0
 
 
 def evaluate(

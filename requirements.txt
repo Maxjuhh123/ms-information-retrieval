@@ -1,2 +1,5 @@
 pandas
 python-terrier
+scikit-learn
+numpy
+keybert
