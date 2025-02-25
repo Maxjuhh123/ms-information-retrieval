@@ -3,3 +3,4 @@ python-terrier
 scikit-learn
 numpy
 keybert
+nltk
