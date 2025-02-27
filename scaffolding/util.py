@@ -26,6 +26,7 @@ BM25 = pt.BatchRetrieve(
 DOCS = [doc["text"] for doc in DATASET.get_corpus_iter()]
 VECTORIZER = TfidfVectorizer()
 TFIDF_MATRIX = VECTORIZER.fit_transform(DOCS)
+DOCNO_TO_INDEX = {doc["docno"]: i for i, doc in enumerate(DATASET.get_corpus_iter())}
 
 def search(query: str) -> pd.DataFrame:
     return (BM25 % 10).search(query)
@@ -35,7 +36,7 @@ def get_tf_idf(word: str) -> float:
     word_index = VECTORIZER.vocabulary_.get(word)
 
     if word_index is not None:
-        return np.mean(TFIDF_MATRIX[:, word_index].toarray())
+        return np.mean(TFIDF_MATRIX[:, word_index])
     else:
         return 0.0
 

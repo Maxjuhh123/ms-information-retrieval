@@ -2,5 +2,6 @@ pandas
 python-terrier
 scikit-learn
 numpy
-keybert
 nltk
+contractions
+pyspellchecker
